@@ -4,6 +4,24 @@
 
 
 using namespace std;
+  void svg_begin(double width, double height) {
+    cout << "<?xml version='1.0' encoding='UTF-8'?>\n";
+    cout << "<svg ";
+    cout << "width='" << width << "' ";
+    cout << "height='" << height << "' ";
+    cout << "viewBox='0 0 " << width << " " << height << "' ";
+    cout << "xmlns='http://www.w3.org/2000/svg'>\n";
+  }
+  void svg_end() {
+    cout << "</svg>\n";
+}
+void show_histogram_svg(const vector<size_t>& bins)
+{
+    size_t width;
+        svg_begin( 300, 400);
+        svg_end();
+
+}
 
 void show_histogram_text(const vector<size_t>& bins)
 {
@@ -62,8 +80,10 @@ void find_minmax(const vector<double>& numbers, double& min, double& max) {
 
 }
 
-int make_histogram(const vector<double>& numbers, const double min, const double max, size_t bin_count, vector<size_t>& bins)
+int make_histogram(const vector<double>& numbers, size_t bin_count, vector<size_t>& bins)
 {
+double min, max;
+find_minmax(numbers, min, max);
     for (double number : numbers) {
         size_t bin = (size_t)((number - min) / (max - min) * bin_count);
         if (bin == bin_count) {
@@ -84,17 +104,12 @@ const auto numbers = input_numbers(number_count);
     size_t bin_count;
     cerr << "Enter column count: ";
     cin >> bin_count;
-double min, max;
-find_minmax(numbers, min, max);
-cout<<"min= "<< min<<endl;
-cout<<"max= "<< max<<endl;
-
     vector<size_t> bins(bin_count);
-make_histogram(numbers,min, max, bin_count, bins);
+make_histogram(numbers, bin_count, bins);
 for ( int i = 0; i< bin_count; i++)
 {
     cout<<" "<< bins[i]<<endl;
 }
-show_histogram_text(bins);
+show_histogram_svg(bins);
     return 0;
 }
