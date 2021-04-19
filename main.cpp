@@ -4,6 +4,11 @@
 
 
 using namespace std;
+
+void svg_text(double left, double baseline, string text)
+{
+cout << "<text x='" << left << "' y='35'>text</text>";
+}
   void svg_begin(double width, double height) {
     cout << "<?xml version='1.0' encoding='UTF-8'?>\n";
     cout << "<svg ";
@@ -19,6 +24,7 @@ void show_histogram_svg(const vector<size_t>& bins)
 {
     size_t width;
         svg_begin( 300, 400);
+           svg_text(20, 20, to_string(bins[0]));
         svg_end();
 
 }
@@ -106,10 +112,6 @@ const auto numbers = input_numbers(number_count);
     cin >> bin_count;
     vector<size_t> bins(bin_count);
 make_histogram(numbers, bin_count, bins);
-for ( int i = 0; i< bin_count; i++)
-{
-    cout<<" "<< bins[i]<<endl;
-}
 show_histogram_svg(bins);
     return 0;
 }
