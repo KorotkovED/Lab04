@@ -36,7 +36,7 @@ double top = 0;
 for (size_t bin : bins) {
     const double bin_width = BLOCK_WIDTH * bin;
     svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-    svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT);
+    svg_rect(0, 0, 100, 200, "blue", "#aaffaa");
     top += BIN_HEIGHT;
 }
  svg_end();
