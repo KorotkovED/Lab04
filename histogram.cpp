@@ -47,7 +47,7 @@ void show_histogram_svg(const vector<size_t>& bins)
             const double scaling_factor = (double)MAX_ASTERISK / max_count;
             height = (size_t)(bin * scaling_factor);
         }
-        const double bin_width = BIN_HEIGHT * bin;
+        const double bin_width = BIN_HEIGHT * height;
         svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(bin));
         svg_rect(top + TEXT_LEFT, TEXT_BASELINE * 2, BIN_HEIGHT, bin_width, "black", "blue");
         top += BIN_HEIGHT ;
