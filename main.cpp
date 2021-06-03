@@ -2,6 +2,7 @@
 #include <vector>
 #include <iomanip>
 #include "histogram.h"
+#include <curl/curl.h>
 
 
 
@@ -100,6 +101,7 @@ int make_histogram(vector<double> numbers ,size_t bin_count, vector<size_t>& bin
 
 int main()
 {
+    curl_global_init(CURL_GLOBAL_ALL);
    Input data= read_input(cin, true);
  vector<size_t> bins(data.bin_count);
     make_histogram(data.numbers,data.bin_count, bins);
