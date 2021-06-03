@@ -6,10 +6,12 @@
 #include <sstream>
 #include <string>
 #include <windows.h>
+#include <stdio.h>
 
 
 
 using namespace std;
+
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -126,7 +128,48 @@ TODO:
 string make_info_text() {
     stringstream buffer;
     // TODO: получить версию системы, записать в буфер.
+  DWORD dwVersion = 0;
+    DWORD dwMajorVersion = 0;
+    DWORD dwMinorVersion = 0;
+    DWORD dwBuild = 0;
+
+    dwVersion = GetVersion();
+    printf("n = %08x\n",dwVersion); //16
+    printf("%u ", dwVersion);//10
+
+
+    // Get the Windows version.
+
+    dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
+    dwMinorVersion = (DWORD)(HIBYTE(LOWORD(dwVersion)));
+
+    // Get the build number.
+
+    if (dwVersion < 0x80000000)
+        dwBuild = (DWORD)(HIWORD(dwVersion));
+
+    printf("Version is %d.%d (%d)\n",
+                dwMajorVersion,
+                dwMinorVersion,
+                dwBuild);
+ DWORD mask = 0b00000000'00000000'11111111'11111111;
+DWORD version = info & mask;
+printf("%u ", version);
+DWORD mask = 0x0000ffff;
+DWORD platform = info >> 16;
+if ((info & 0x1000ffff) == 0) {
+    ...
+}
     // TODO: получить имя компьютера, записать в буфер.
+    char system_dir[MAX_PATH];
+GetSystemDirectory(system_dir, MAX_PATH);
+printf("System directory: %s", system_dir);
+LPTSTR buffer;
+GetSystemDirectory(buffer, 256);
+BOOL GetComputerNameA(
+  LPSTR   lpBuffer,
+  LPDWORD lpnSize
+);
     return buffer.str();
 }
 
@@ -149,6 +192,12 @@ int make_histogram(vector<double> numbers,size_t bin_count, vector<size_t>& bins
 
 int main(int argc, char* argv[])
 {
+    int printf(const char* format, ...);
+const char* name = "Commander Shepard";
+int year = 2154;
+printf("%s was born in %d.\n", name, year);
+
+
     Input data;
     curl_global_init(CURL_GLOBAL_ALL);
     if (argc > 1)
