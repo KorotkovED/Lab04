@@ -5,6 +5,7 @@
 #include <curl/curl.h>
 #include <sstream>
 #include <string>
+#include <windows.h>
 
 
 
@@ -19,25 +20,33 @@ vector<double> input_numbers(istream& in, size_t count)
     return result;
 }
 
-struct Input {
+struct Input
+{
     vector<double> numbers;
     size_t bin_count;
-     bool prompt;
+    bool prompt;
 };
 Input
-read_input(istream& in, bool prompt) {
+read_input(istream& in, bool prompt)
+{
     Input data;
-    if (prompt == true){
-    cerr << "Enter number count: ";}
+    if (prompt == true)
+    {
+        cerr << "Enter number count: ";
+    }
     size_t number_count;
     in >> number_count;
-   if (prompt == true){
-    cerr << "Enter numbers: ";}
+    if (prompt == true)
+    {
+        cerr << "Enter numbers: ";
+    }
     data.numbers = input_numbers(in, number_count);
 
     size_t bin_count;
-    if (prompt == true){
-    cerr << "Enter column count: ";}
+    if (prompt == true)
+    {
+        cerr << "Enter column count: ";
+    }
     cin >> bin_count;
     return data;
 }
@@ -82,38 +91,48 @@ void show_histogram_text(const vector<size_t>& bins)
         cout << '\n';
     }
 }
-size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
-    TODO:
+size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
+{
+TODO:
     size_t data_size = item_size * item_count;
- stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
- (*buffer).write(reinterpret_cast<char*>(&items), data_size);
-     return 0;
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+    (*buffer).write(reinterpret_cast<char*>(&items), data_size);
+    return 0;
 }
 Input
-download(const string& address) {
+download(const string& address)
+{
     stringstream buffer;
 
- TODO:  CURL *curl = curl_easy_init();
-if(curl) {
-  CURLcode res;
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-  res = curl_easy_perform(curl);
-  if(res != 0)
-  {
-    const char *curl_easy_strerror(CURLcode errornum);
-    exit(1);
+TODO:
+    CURL *curl = curl_easy_init();
+    if(curl)
+    {
+        CURLcode res;
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
 
-  }
-  curl_easy_cleanup(curl);
-}
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+        {
+            printf( "curl_easy_perform() failed: %s\n", curl_easy_strerror(res) );
+            exit(1);
+        }
+        curl_easy_cleanup(curl);
+    }
 
     return read_input(buffer, false);
 }
+string make_info_text() {
+    stringstream buffer;
+    // TODO: получить версию системы, записать в буфер.
+    // TODO: получить имя компьютера, записать в буфер.
+    return buffer.str();
+}
 
 
 
-int make_histogram(vector<double> numbers ,size_t bin_count, vector<size_t>& bins)
+int make_histogram(vector<double> numbers,size_t bin_count, vector<size_t>& bins)
 {
     double min, max;
     find_minmax(numbers, min, max);
@@ -129,17 +148,19 @@ int make_histogram(vector<double> numbers ,size_t bin_count, vector<size_t>& bin
 }
 
 int main(int argc, char* argv[])
-{Input data;
+{
+    Input data;
     curl_global_init(CURL_GLOBAL_ALL);
     if (argc > 1)
     {
-  Input input = download(argv[1]);
-}
-else{
-   data = read_input(cin, true);
-}
+        Input input = download(argv[1]);
+    }
+    else
+    {
+        data = read_input(cin, true);
+    }
 
- vector<size_t> bins(data.bin_count);
+    vector<size_t> bins(data.bin_count);
     make_histogram(data.numbers,data.bin_count, bins);
     show_histogram_svg(bins);
     return 0;
