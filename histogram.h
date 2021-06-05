@@ -18,4 +18,5 @@ void svg_text(double left, double baseline, string text);
 void svg_rect(double x, double y, double width, double height,string stroke = "black", string fill = "black");
 struct Input;
 
+string make_info_text();
 #endif // HISTOGRAM_H_INCLUDED
