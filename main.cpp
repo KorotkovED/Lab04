@@ -6,8 +6,7 @@
 #include <sstream>
 #include <string>
 #include <windows.h>
-#include <сstdio.h>
-#include <winbase.h>
+#include <stdio.h>
 #include <math.h>
 
 
@@ -124,35 +123,37 @@ download(const string& address)
     const char* line;
 
     CURL* curl = curl_easy_init();
-curl_version_info_data *curl_version_info(CURLversion stamp);
+    curl_version_info_data *curl_version_info(CURLversion stamp);
 
 
     curl_global_init(CURL_GLOBAL_ALL);
 
 
-    if(curl) {
+    if(curl)
+    {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, address);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-   cerr<< "cURL Version: " <<curl_version_info(CURLVERSION_NOW)<<endl;
-auto info = curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_VERSION_SSL);
-    cerr<<"SSL version "<<info;
+        cerr<< "cURL Version: " <<curl_version_info(CURLVERSION_NOW)<<endl;
+        auto info = curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_VERSION_SSL);
+        cerr<<"SSL version "<<info;
 
         res = curl_easy_perform(curl);
-         if (res != 0)
-         {
-             cerr<< "curl_easy_perform() failed: %s\n"<< curl_easy_strerror(res);
+        if (res != 0)
+        {
+            cerr<< "curl_easy_perform() failed: %s\n"<< curl_easy_strerror(res);
             exit(1);
-         }
+        }
         curl_easy_cleanup(curl);
-}
+    }
 
 
     return read_input(buffer, false);
 }
 
 
-size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
+size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
+{
 
 
     auto data_size = item_size * item_count;
@@ -163,10 +164,45 @@ size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
 
     return (data_size);
 }
-string make_info_text() {
+BOOL GetComputerNameA(
+    LPSTR   lpBuffer,
+    LPDWORD lpnSize
+);
+string make_info_text()
+{
     stringstream buffer;
     // TODO: получить версию системы, записать в буфер.
-    // TODO: получить имя компьютера, записать в буфер.
+    DWORD WINAPI GetVersion(void);
+    DWORD info = 0;
+    info = GetVersion();
+    printf("n = %08x\n",info); //16
+    printf("%u ", info);//10
+    DWORD mask = 0b00000000'00000000'11111111'11111111;
+    DWORD version = info & mask;
+    cerr << " "<<version<<endl;
+    DWORD mask1 = 0x0000ffff;
+    DWORD platform = info >> 16;
+
+    DWORD maskVision = 0b00000000'11111111;
+    DWORD version_major = version & maskVision;
+    DWORD mask2 = 0x0000ffff;
+    DWORD version_minor = version >> 8;
+    if ((info & 0x1000ffff) == 0)
+    {
+        version_major = 0;
+    }
+    DWORD build = platform;
+
+   printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
+
+    //TODO:
+    LPSTR   x;
+    LPDWORD y;
+            char system_dir[MAX_PATH];
+    GetSystemDirectory(system_dir, MAX_PATH);
+    printf("System directory: %s", system_dir);
+    auto huffer = GetComputerNameA(x,y);
+    printf(" Computer name:  " , huffer);
     return buffer.str();
 }
 
