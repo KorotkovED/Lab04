@@ -6,12 +6,12 @@
 #include <sstream>
 #include <string>
 #include <windows.h>
-#include <stdio.h>
-
+#include <сstdio.h>
+#include <winbase.h>
+#include <math.h>
 
 
 using namespace std;
-
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -21,37 +21,24 @@ vector<double> input_numbers(istream& in, size_t count)
     }
     return result;
 }
+Input read_input(istream& in, bool F)
+{
 
-struct Input
-{
-    vector<double> numbers;
-    size_t bin_count;
-    bool prompt;
-};
-Input
-read_input(istream& in, bool prompt)
-{
     Input data;
-    if (prompt == true)
-    {
-        cerr << "Enter number count: ";
-    }
+
+    if (F) cerr << "Enter number count: ";
     size_t number_count;
     in >> number_count;
-    if (prompt == true)
-    {
-        cerr << "Enter numbers: ";
-    }
+
+    if (F) cerr << "Enter numbers: ";
     data.numbers = input_numbers(in, number_count);
 
-    size_t bin_count;
-    if (prompt == true)
-    {
-        cerr << "Enter column count: ";
-    }
-    cin >> bin_count;
+    if (F) cerr << "Enter bin count: ";
+    in >> data.bin_count;
+
     return data;
 }
+
 void show_histogram_text(const vector<size_t>& bins)
 {
     const size_t SCREEN_WIDTH = 80;
@@ -93,124 +80,109 @@ void show_histogram_text(const vector<size_t>& bins)
         cout << '\n';
     }
 }
-size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
+
+
+
+vector<size_t> make_histogram(Input data)
 {
-TODO:
-    size_t data_size = item_size * item_count;
-    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
-    (*buffer).write(reinterpret_cast<char*>(&items), data_size);
-    return 0;
+    size_t number_count=data.numbers.size();
+    vector<size_t> bins(data.bin_count);
+
+    cerr<< "cerr "<<data.bin_count;
+    double min, max;
+    find_minmax(data.numbers, min, max);
+    double bin_size = (max - min) / data.bin_count;
+    for (size_t i = 0; i < number_count; i++)
+    {
+
+        bool found = false;
+        for (size_t j = 0; (j < data.bin_count - 1) && !found; j++)
+        {
+            auto lo = min + j * bin_size;
+            auto hi = min + (j + 1) * bin_size;
+            if ((lo <= data.numbers[i]) && (data.numbers[i] < hi))
+            {
+                bins[j]++;
+                found = true;
+            }
+        }
+// цикл по numbers не закончился!
+
+        if (!found)
+        {
+            bins[data.bin_count - 1]++;
+        }
+
+    } // конец цикла по numbers
+
+    return bins;
 }
 Input
 download(const string& address)
 {
     stringstream buffer;
+    const char* line;
 
-TODO:
-    CURL *curl = curl_easy_init();
-    if(curl)
-    {
+    CURL* curl = curl_easy_init();
+curl_version_info_data *curl_version_info(CURLversion stamp);
+
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+
+    if(curl) {
         CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        curl_easy_setopt(curl, CURLOPT_URL, address);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
+   cerr<< "cURL Version: " <<curl_version_info(CURLVERSION_NOW)<<endl;
+auto info = curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_VERSION_SSL);
+    cerr<<"SSL version "<<info;
 
         res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-        {
-            printf( "curl_easy_perform() failed: %s\n", curl_easy_strerror(res) );
+         if (res != 0)
+         {
+             cerr<< "curl_easy_perform() failed: %s\n"<< curl_easy_strerror(res);
             exit(1);
-        }
+         }
         curl_easy_cleanup(curl);
-    }
+}
+
 
     return read_input(buffer, false);
+}
+
+
+size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
+
+
+    auto data_size = item_size * item_count;
+
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+
+    buffer->write(reinterpret_cast<const char*>(items), data_size);
+
+    return (data_size);
 }
 string make_info_text() {
     stringstream buffer;
     // TODO: получить версию системы, записать в буфер.
-  DWORD dwVersion = 0;
-    DWORD dwMajorVersion = 0;
-    DWORD dwMinorVersion = 0;
-    DWORD dwBuild = 0;
-
-    dwVersion = GetVersion();
-    printf("n = %08x\n",dwVersion); //16
-    printf("%u ", dwVersion);//10
-
-
-    // Get the Windows version.
-
-    dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
-    dwMinorVersion = (DWORD)(HIBYTE(LOWORD(dwVersion)));
-
-    // Get the build number.
-
-    if (dwVersion < 0x80000000)
-        dwBuild = (DWORD)(HIWORD(dwVersion));
-
-    printf("Version is %d.%d (%d)\n",
-                dwMajorVersion,
-                dwMinorVersion,
-                dwBuild);
- DWORD mask = 0b00000000'00000000'11111111'11111111;
-DWORD version = info & mask;
-printf("%u ", version);
-DWORD mask = 0x0000ffff;
-DWORD platform = info >> 16;
-if ((info & 0x1000ffff) == 0) {
-    ...
-}
     // TODO: получить имя компьютера, записать в буфер.
-    char system_dir[MAX_PATH];
-GetSystemDirectory(system_dir, MAX_PATH);
-printf("System directory: %s", system_dir);
-LPTSTR buffer;
-GetSystemDirectory(buffer, 256);
-BOOL GetComputerNameA(
-  LPSTR   lpBuffer,
-  LPDWORD lpnSize
-);
     return buffer.str();
-}
-
-
-
-int make_histogram(vector<double> numbers,size_t bin_count, vector<size_t>& bins)
-{
-    double min, max;
-    find_minmax(numbers, min, max);
-    for (double number : numbers)
-    {
-        size_t bin = (size_t)((number - min) / (max - min) * bin_count);
-        if (bin == bin_count)
-        {
-            bin--;
-        }
-        bins[bin]++;
-    }
 }
 
 int main(int argc, char* argv[])
 {
-    int printf(const char* format, ...);
-const char* name = "Commander Shepard";
-int year = 2154;
-printf("%s was born in %d.\n", name, year);
-
-
-    Input data;
-    curl_global_init(CURL_GLOBAL_ALL);
-    if (argc > 1)
+    Input input;
+    if(argc>1)
     {
-        Input input = download(argv[1]);
+        input = download(argv[1]);
     }
     else
     {
-        data = read_input(cin, true);
+        input = read_input(cin,true);
     }
 
-    vector<size_t> bins(data.bin_count);
-    make_histogram(data.numbers,data.bin_count, bins);
+    const auto bins = make_histogram(input);
     show_histogram_svg(bins);
     return 0;
 }
