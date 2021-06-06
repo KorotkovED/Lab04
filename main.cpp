@@ -11,6 +11,7 @@
 
 
 using namespace std;
+
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -123,20 +124,32 @@ download(const string& address)
     const char* line;
 
     CURL* curl = curl_easy_init();
-    curl_version_info_data *curl_version_info(CURLversion stamp);
 
 
     curl_global_init(CURL_GLOBAL_ALL);
-
-
+  char *curl_version();
+  cerr << " "<< *curl_version();
+  const char *ssl_version;
     if(curl)
     {
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, address);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
-        cerr<< "cURL Version: " <<curl_version_info(CURLVERSION_NOW)<<endl;
-        auto info = curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_VERSION_SSL);
-        cerr<<"SSL version "<<info;
+        const char *version;
+        curl_version_info_data *d = curl_version_info(CURLVERSION_NOW);
+
+/* compare with the 24 bit hex number in 8 bit fields */
+if(d->version_num >= 0x072100) {
+  /* this is libcurl 7.33.0 or later */
+  cerr << "Succcess\n";
+}
+else {
+  cerr << "A too old version\n";
+}
+
+          curl_version_info_data *ver = curl_version_info(CURLVERSION_NOW);
+          ssl_version = curl_version_info (CURLVERSION_NOW)->ssl_version;
+          cerr <<"Version "<< ssl_version;
 
         res = curl_easy_perform(curl);
         if (res != 0)
@@ -176,7 +189,7 @@ string make_info_text()
     DWORD info = 0;
     info = GetVersion();
     printf("n = %08x\n",info); //16
-    printf("%u ", info);//10
+    printf("%u \n", info);//10
     DWORD mask = 0b00000000'00000000'11111111'11111111;
     DWORD version = info & mask;
     cerr << " "<<version<<endl;
@@ -193,16 +206,18 @@ string make_info_text()
     }
     DWORD build = platform;
 
-   printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
+ printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
 
     //TODO:
-    LPSTR   x;
-    LPDWORD y;
             char system_dir[MAX_PATH];
     GetSystemDirectory(system_dir, MAX_PATH);
-    printf("System directory: %s", system_dir);
-    auto huffer = GetComputerNameA(x,y);
-    printf(" Computer name:  " , huffer);
+   printf("System directory: %s", system_dir);
+
+TCHAR bufferrr[MAX_COMPUTERNAME_LENGTH + 1];
+DWORD ssize = sizeof(bufferrr) / sizeof(TCHAR);
+  GetComputerName(bufferrr, &ssize);
+
+    cout <<"Computer name: " <<bufferrr  <<endl;
     return buffer.str();
 }
 
