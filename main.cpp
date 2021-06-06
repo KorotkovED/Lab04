@@ -124,7 +124,7 @@ download(const string& address)
 
     CURL* curl = curl_easy_init();
 
-
+    const char* ssl_version;
     curl_global_init(CURL_GLOBAL_ALL);
     if(curl)
     {
@@ -134,18 +134,20 @@ download(const string& address)
         const char *version;
         curl_version_info_data *d = curl_version_info(CURLVERSION_NOW);
 
-/* compare with the 24 bit hex number in 8 bit fields */
-if(d->version_num >= 0x072100) {
-  /* this is libcurl 7.33.0 or later */
-  cerr << "Succcess\n";
-}
-else {
-  cerr << "A too old version\n";
-}
-cerr << "SSLVersion: \n"<< curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_DEFAULT);
-          curl_version_info_data *ver = curl_version_info(CURLVERSION_NOW);
-          ssl_version = curl_version_info (CURLVERSION_NOW)->ssl_version;
-          cerr <<"Version \n "<< ssl_version;
+        /* compare with the 24 bit hex number in 8 bit fields */
+        if(d->version_num >= 0x072100)
+        {
+            /* this is libcurl 7.33.0 or later */
+            cerr << "Succcess\n";
+        }
+        else
+        {
+            cerr << "A too old version\n";
+        }
+        cerr << "SSLVersion: \n"<< curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_DEFAULT);
+        curl_version_info_data *ver = curl_version_info(CURLVERSION_NOW);
+        ssl_version = curl_version_info (CURLVERSION_NOW)->ssl_version;
+        cerr <<"Version \n "<< ssl_version;
 
         res = curl_easy_perform(curl);
         if (res != 0)
@@ -180,6 +182,11 @@ BOOL GetComputerNameA(
 string make_info_text()
 {
     stringstream buffer;
+     char string[] = "Wndows v. ";
+    char string1[] = ". ";
+    char string2[] = "(build ";
+    char string3[] = ") ";
+    char string4[] = " Computer name: ";
     // TODO: получить версию системы, записать в буфер.
     DWORD WINAPI GetVersion(void);
     DWORD info = 0;
@@ -201,20 +208,28 @@ string make_info_text()
         version_major = 0;
     }
     DWORD build = platform;
-
- printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
+    strcpy(string,reinterpret_cast<char*>(version_major));
+    cout << " "<<string;
+    strcpy(string,string1);
+    cout << " "<<string;
+    strcpy(string,reinterpret_cast<char*>(version_minor));
+    strcpy(string,string2);
+    strcpy(string,reinterpret_cast<char*>(build));
+    strcpy(string,string3);
+    printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
 
     //TODO:
-            char system_dir[MAX_PATH];
+    char system_dir[MAX_PATH];
     GetSystemDirectory(system_dir, MAX_PATH);
-   printf("System directory: %s", system_dir);
+    printf("System directory: %s", system_dir);
 
-TCHAR bufferrr[MAX_COMPUTERNAME_LENGTH + 1];
-DWORD ssize = sizeof(bufferrr) / sizeof(TCHAR);
-  GetComputerName(bufferrr, &ssize);
-
+    TCHAR bufferrr[MAX_COMPUTERNAME_LENGTH + 1];
+    DWORD ssize = sizeof(bufferrr) / sizeof(TCHAR);
+    GetComputerName(bufferrr, &ssize);
+    strcpy(string,string4);
+    strcpy(string,reinterpret_cast<char*>(bufferrr));
     cout <<"Computer name: " <<bufferrr  <<endl;
-    return buffer.str();
+    return string;
 }
 
 int main(int argc, char* argv[])
