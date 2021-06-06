@@ -121,15 +121,11 @@ Input
 download(const string& address)
 {
     stringstream buffer;
-    const char* line;
 
     CURL* curl = curl_easy_init();
 
 
     curl_global_init(CURL_GLOBAL_ALL);
-  char *curl_version();
-  cerr << " "<< *curl_version();
-  const char *ssl_version;
     if(curl)
     {
         CURLcode res;
@@ -146,10 +142,10 @@ if(d->version_num >= 0x072100) {
 else {
   cerr << "A too old version\n";
 }
-
+cerr << "SSLVersion: \n"<< curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_DEFAULT);
           curl_version_info_data *ver = curl_version_info(CURLVERSION_NOW);
           ssl_version = curl_version_info (CURLVERSION_NOW)->ssl_version;
-          cerr <<"Version "<< ssl_version;
+          cerr <<"Version \n "<< ssl_version;
 
         res = curl_easy_perform(curl);
         if (res != 0)
