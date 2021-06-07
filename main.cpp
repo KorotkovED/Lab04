@@ -176,14 +176,10 @@ BOOL GetComputerNameA(
     LPSTR   lpBuffer,
     LPDWORD lpnSize
 );
-string make_info_text()
+Inputp
+make_info_text()
 {
-    stringstream buffer;
-     char string0[] = "Wndows v. ";
-    char string1[] = ". ";
-    char string2[] = "(build ";
-    char string3[] = ") ";
-    char string4[] = " Computer name: ";
+    Inputp i;
     // TODO: получить версию системы, записать в буфер.
     DWORD WINAPI GetVersion(void);
     DWORD info = 0;
@@ -192,41 +188,26 @@ string make_info_text()
     printf("%u \n", info);//10
     DWORD mask = 0b00000000'00000000'11111111'11111111;
     DWORD version = info & mask;
-    cerr << " "<<version<<endl;
     DWORD mask1 = 0x0000ffff;
     DWORD platform = info >> 16;
 
     DWORD maskVision = 0b00000000'11111111;
-    DWORD version_major = version & maskVision;
+    i.version_major = version & maskVision;
     DWORD mask2 = 0x0000ffff;
-    DWORD version_minor = version >> 8;
+    i.version_minor = version >> 8;
     if ((info & 0x1000ffff) == 0)
     {
-        version_major = 0;
+        i.version_major = 0;
     }
-    DWORD build = platform;
-    strcpy(reinterpret_cast<stringstream*> (buffer),reinterpret_cast<stringstream*>(version_major));
-    cout << " "<<buffer;
-    strcpy(buffer,string1);
-    cout << " "<<buffer;
-    strcpy(buffer,reinterpret_cast<char*>(version_minor));
-    strcpy(buffer,string2);
-    strcpy(buffer,reinterpret_cast<char*>(build));
-    strcpy(buffer,string3);
-    printf("Wndows v.%u.%u(build %u)\n", version_major, version_minor,build);
+    i.build = platform;
 
     //TODO:
     char system_dir[MAX_PATH];
     GetSystemDirectory(system_dir, MAX_PATH);
-    printf("System directory: %s", system_dir);
 
-    TCHAR bufferrr[MAX_COMPUTERNAME_LENGTH + 1];
-    DWORD ssize = sizeof(bufferrr) / sizeof(TCHAR);
-    GetComputerName(bufferrr, &ssize);
-    strcpy(string,string4);
-    strcpy(string,reinterpret_cast<char*>(bufferrr));
-    cout <<"Computer name: " <<bufferrr  <<endl;
-    return buffer.str();
+    DWORD ssize = sizeof(i.bufferrr) / sizeof(TCHAR);
+    GetComputerName(i.bufferrr, &ssize);
+    return i;
 }
 
 int main(int argc, char* argv[])
