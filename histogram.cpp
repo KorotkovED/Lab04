@@ -39,7 +39,6 @@ void svg_text(double left, double baseline, string text)
 }
 void show_histogram_svg(const vector<size_t>& bins)
 {
-
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
@@ -72,7 +71,23 @@ void show_histogram_svg(const vector<size_t>& bins)
         svg_rect(top + TEXT_LEFT, TEXT_BASELINE *2 , BIN_HEIGHT, bin_width, "black", "blue");
         top += BIN_HEIGHT ;
     }
-     svg_text(top + BIN_HEIGHT, TEXT_BASELINE, make_info_text() );
+make_info_text();
+Inputp i;
+string w = "Windows v.";
+string p = " .";
+string b ="[build ";
+string a = " ]";
+string c = "Computer name: ";
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE + 75 , w);
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE  , to_string(i.version_major));
+  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , p);
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.version_minor));
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , b);
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.build));
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , a);
+  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , c);
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.bufferrr));
+
     svg_end();
 }
 
