@@ -86,7 +86,7 @@ string c = "Computer name: ";
  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.build));
  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , a);
   svg_text(top + BIN_HEIGHT, TEXT_BASELINE , c);
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.bufferrr));
+ svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.bufferrr[MAX_COMPUTERNAME_LENGTH + 1]));
 
     svg_end();
 }
