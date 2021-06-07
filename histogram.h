@@ -1,12 +1,20 @@
 #ifndef HISTOGRAM_H_INCLUDED
 #include <vector>
 #include <string>
+#include <Windows.h>
 #define HISTOGRAM_H_INCLUDED
 using namespace std;
+struct Inputp
+{
+      DWORD build;
+       DWORD version_major;
+       DWORD version_minor;
+       TCHAR bufferrr[MAX_COMPUTERNAME_LENGTH + 1];
+};
 struct Input {  vector<double> numbers; size_t bin_count;};
-    string make_info_text();
 void find_minmax(const vector<double>& numbers, double& min, double& max);
-
+Inputp
+make_info_text();
 void show_histogram_svg(const vector<size_t>& bins);
 
 void svg_end();
