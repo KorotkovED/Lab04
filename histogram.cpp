@@ -47,7 +47,7 @@ void show_histogram_svg(const vector<size_t>& bins)
     const auto BIN_HEIGHT = 30;
     const auto BLOCK_WIDTH = 10;
     double top = 0;
-    const size_t MAX_ASTERISK = IMAGE_HEIGHT - TEXT_BASELINE * 2;
+    const size_t MAX_ASTERISK = IMAGE_HEIGHT - 20;
      size_t max_count = 0;
     for (size_t count : bins)
     {
@@ -56,14 +56,14 @@ void show_histogram_svg(const vector<size_t>& bins)
             max_count = count;
         }
     }
-    const bool scaling_needed = max_count > MAX_ASTERISK;
+    const bool scaling_needed = max_count*BIN_HEIGHT > MAX_ASTERISK;
     svg_begin( 500, 600);
     for (size_t bin : bins)
     {
        size_t height = bin;
         if (scaling_needed)
         {
-            const double scaling_factor = (double)MAX_ASTERISK / max_count;
+            const double scaling_factor = (double)MAX_ASTERISK / (max_count*BIN_HEIGHT);
             height = (size_t)(bin * scaling_factor);
         }
         const double bin_width = BIN_HEIGHT * height;
@@ -81,7 +81,7 @@ Inputp i;
  svg_text(top + BIN_HEIGHT, TEXT_BASELINE + 75 , w);
  svg_text(top + BIN_HEIGHT + 80, TEXT_BASELINE +75 ,to_string(i.version_minor));
   svg_text(top + BIN_HEIGHT + 90, TEXT_BASELINE +75 , p);
- svg_text(top + BIN_HEIGHT + 100, TEXT_BASELINE +75  , to_string(i.version_major));
+ svg_text(top + BIN_HEIGHT + 95, TEXT_BASELINE +75  , to_string(i.version_major));
  svg_text(top + BIN_HEIGHT + 120, TEXT_BASELINE+75 , b);
  svg_text(top + BIN_HEIGHT + 160, TEXT_BASELINE+75 , to_string(i.build));
  svg_text(top + BIN_HEIGHT + 230, TEXT_BASELINE + 75, a);
