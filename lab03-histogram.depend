@@ -63,3 +63,68 @@
 
 1621918820 c:\users\egor\desktop\lab04\lab04\curl\include\curl\typecheck-gcc.h
 
+1623110856 source:c:\users\egor\desktop\ï\lab04\histogram.cpp
+	"histogram.h"
+	<iomanip>
+	<iostream>
+	<string>
+
+1623106155 c:\users\egor\desktop\ï\lab04\histogram.h
+	<vector>
+	<string>
+	<Windows.h>
+
+1623108807 source:c:\users\egor\desktop\ï\lab04\main.cpp
+	<iostream>
+	<vector>
+	<iomanip>
+	"histogram.h"
+	<curl/curl.h>
+	<sstream>
+	<string>
+	<windows.h>
+	<stdio.h>
+	<math.h>
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\curl.h
+	"curlver.h"
+	"system.h"
+	<stdio.h>
+	<limits.h>
+	<osreldate.h>
+	<sys/types.h>
+	<time.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/select.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<support/SupportDefs.h>
+	"easy.h"
+	"multi.h"
+	"urlapi.h"
+	"options.h"
+	"typecheck-gcc.h"
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\curlver.h
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\system.h
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<sys/poll.h>
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\easy.h
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\multi.h
+	"curl.h"
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\urlapi.h
+	"curl.h"
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\options.h
+
+1623106155 c:\users\egor\desktop\ï\lab04\curl\include\curl\typecheck-gcc.h
+
