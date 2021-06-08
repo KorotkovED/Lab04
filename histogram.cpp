@@ -39,8 +39,8 @@ void svg_text(double left, double baseline, string text)
 }
 void show_histogram_svg(const vector<size_t>& bins)
 {
-    const auto IMAGE_WIDTH = 400;
-    const auto IMAGE_HEIGHT = 300;
+    const auto IMAGE_WIDTH = 600;
+    const auto IMAGE_HEIGHT = 500;
     const auto TEXT_LEFT = 20;
     const auto TEXT_BASELINE = 20;
     const auto TEXT_WIDTH = 50;
@@ -57,7 +57,7 @@ void show_histogram_svg(const vector<size_t>& bins)
         }
     }
     const bool scaling_needed = max_count > MAX_ASTERISK;
-    svg_begin( 300, 400);
+    svg_begin( 500, 600);
     for (size_t bin : bins)
     {
        size_t height = bin;
@@ -71,22 +71,22 @@ void show_histogram_svg(const vector<size_t>& bins)
         svg_rect(top + TEXT_LEFT, TEXT_BASELINE *2 , BIN_HEIGHT, bin_width, "black", "blue");
         top += BIN_HEIGHT ;
     }
-make_info_text();
-Inputp i;
 string w = "Windows v.";
 string p = " .";
 string b ="[build ";
 string a = " ]";
 string c = "Computer name: ";
+make_info_text();
+Inputp i;
  svg_text(top + BIN_HEIGHT, TEXT_BASELINE + 75 , w);
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE  , to_string(i.version_major));
-  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , p);
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.version_minor));
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , b);
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.build));
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , a);
-  svg_text(top + BIN_HEIGHT, TEXT_BASELINE , c);
- svg_text(top + BIN_HEIGHT, TEXT_BASELINE , to_string(i.bufferrr[MAX_COMPUTERNAME_LENGTH + 1]));
+ svg_text(top + BIN_HEIGHT + 80, TEXT_BASELINE +75 ,to_string(i.version_minor));
+  svg_text(top + BIN_HEIGHT + 90, TEXT_BASELINE +75 , p);
+ svg_text(top + BIN_HEIGHT + 100, TEXT_BASELINE +75  , to_string(i.version_major));
+ svg_text(top + BIN_HEIGHT + 120, TEXT_BASELINE+75 , b);
+ svg_text(top + BIN_HEIGHT + 160, TEXT_BASELINE+75 , to_string(i.build));
+ svg_text(top + BIN_HEIGHT + 230, TEXT_BASELINE + 75, a);
+  svg_text(top + BIN_HEIGHT, TEXT_BASELINE +100 , c);
+ svg_text(top + BIN_HEIGHT + 115, TEXT_BASELINE +100, to_string(i.bufferrr[MAX_COMPUTERNAME_LENGTH + 1]) );
 
     svg_end();
 }
