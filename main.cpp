@@ -117,6 +117,18 @@ vector<size_t> make_histogram(Input data)
 
     return bins;
 }
+size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
+{
+
+
+    auto data_size = item_size * item_count;
+
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+
+    buffer->write(reinterpret_cast<const char*>(items), data_size);
+
+    return data_size;
+}
 Input
 download(const string& address)
 {
@@ -125,11 +137,11 @@ download(const string& address)
     CURL* curl = curl_easy_init();
 
 
-    curl_global_init(CURL_GLOBAL_ALL);
     if(curl)
     {
         CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, address);
+        curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
+                curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
         curl_version_info_data *d = curl_version_info(CURLVERSION_NOW);
         /* compare with the 24 bit hex number in 8 bit fields */
@@ -159,19 +171,6 @@ cerr << "SSLVersion "<< d->ssl_version<<endl;
     return read_input(buffer, false);
 }
 
-
-size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
-{
-
-
-    auto data_size = item_size * item_count;
-
-    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
-
-    buffer->write(reinterpret_cast<const char*>(items), data_size);
-
-    return (data_size);
-}
 BOOL GetComputerNameA(
     LPSTR   lpBuffer,
     LPDWORD lpnSize
@@ -193,6 +192,8 @@ make_info_text()
 
     DWORD maskVision = 0b00000000'11111111;
     i.version_major = version & maskVision;
+    cout<<"VMaj = "<<i.version_major;
+    cout<<"VMajstr = " << to_string( i.version_major);
     DWORD mask2 = 0x0000ffff;
     i.version_minor = version >> 8;
     if ((info & 0x1000ffff) == 0)
@@ -200,13 +201,15 @@ make_info_text()
         i.version_major = 0;
     }
     i.build = platform;
+    cout<<" "<<i.build;
 
     //TODO:
     char system_dir[MAX_PATH];
     GetSystemDirectory(system_dir, MAX_PATH);
 
     DWORD ssize = sizeof(i.bufferrr) / sizeof(TCHAR);
-    GetComputerName(i.bufferrr, &ssize);
+   cout<<"Comp = "<< GetComputerName(i.bufferrr, &ssize);
+   cout<< "buff "<<  i.bufferrr ;
     return i;
 }
 
